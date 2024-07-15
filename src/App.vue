@@ -1,47 +1,48 @@
 <script setup>
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
+import { ref, computed } from 'vue';
+import InputEntrada from './components/InputEntrada.vue';
+import InputSegundaEntrada from './components/InputSegundaEntrada.vue';
+import Resultado from './components/Resultado.vue';
+
+const num1 = ref(0);
+const num2 = ref(0);
+const operation = ref('add');
+
+const result = computed(() => {
+  switch (operation.value) {
+    case 'add':
+      return num1.value + num2.value;
+    case 'subtract':
+      return num1.value - num2.value;
+    case 'multiply':
+      return num1.value * num2.value;
+    case 'divide':
+      return num2.value !== 0 ? num1.value / num2.value : 'Erro: Divisão por zero';
+    default:
+      return 0;
+  }
+});
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
+  <div id="app" class="container">
+    <h1 class="my-4">Calculadora Aritmética</h1>
+    <div class="row mb-3">
+      <InputEntrada :num1="num1" @update:num1="num1 = $event" />
+      <InputSegundaEntrada :num2="num2" :operation="operation" @update:num2="num2 = $event" @update:operation="operation = $event" />
     </div>
-  </header>
-
-  <main>
-    <TheWelcome />
-  </main>
+    <Resultado :result="result" />
+  </div>
 </template>
 
-<style scoped>
-header {
-  line-height: 1.5;
+<style>
+#app {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  text-align: center;
+  color: #2c3e50;
+  margin-top: 60px;
 }
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
+input, select {
+  margin: 10px;
 }
 </style>
